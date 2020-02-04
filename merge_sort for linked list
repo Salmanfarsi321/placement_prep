@@ -1,0 +1,56 @@
+Node* middle(Node* head)
+{
+   if(head==NULL || head->next==NULL)
+   return head;
+   Node* fast=head;
+   Node* slow=NULL;
+   while(fast && fast->next)
+   {
+       fast=fast->next->next;
+       slow=slow? slow->next:head;
+   }
+   if(fast==NULL)
+   {
+       Node* temp=slow->next;
+       slow->next=NULL;
+       return temp;
+   }
+   else
+   {
+       Node* temp=slow->next->next;
+       slow->next->next=NULL;
+       return temp;
+   }
+}
+
+Node* merge(Node* a,Node* b)
+{
+    Node* result=NULL;
+    if(a==NULL)
+    return b;
+    if(b==NULL)
+    return a;
+    if(a->data<b->data)
+    {
+        result=a;
+        result->next=merge(a->next,b);
+    }
+    else
+    {
+        result=b;
+        result->next=merge(a,b->next);
+    }
+    return result;
+}
+
+Node* mergeSort(Node* head) 
+{
+    // your code here
+    if(head==NULL || head->next==NULL)
+    return head;
+    Node* mid=middle(head);
+    Node* l=mergeSort(head);
+    Node* r=mergeSort(mid);
+    head=merge(l,r);
+    return head;
+}
