@@ -1,2 +1,2 @@
 # placement_prep
-contains solutions to question asked in big companies
+contains important DS and Algorithmic questions solution
