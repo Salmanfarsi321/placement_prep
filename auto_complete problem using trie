@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct trienode{
+    struct trienode* children[26];
+    bool isend;
+    int weight;
+};
+
+struct trienode *getnode(){
+    struct trienode* node=new trienode();
+    node->isend=false;
+    for(int i=0;i<26;i++){
+    node->children[i]=NULL;
+    node->weight=-1;
+    }
+    return node;
+}
+
+void insert(trienode* root,string key,int wt){
+    struct trienode* tempnode=root;
+    for(int i=0;i<key.size();i++){
+    if(!tempnode->children[key[i]-'a']){
+        tempnode->children[key[i]-'a']=getnode();
+    }
+    tempnode=tempnode->children[key[i]-'a'];
+    if(tempnode->weight<wt)
+    tempnode->weight=wt;
+    }
+    tempnode->isend=true;
+}
+
+int auto_complete(trienode* root,string text){
+    struct trienode* tempnode=root;
+    for(int i=0;i<text.size();i++){
+        if(!tempnode->children[text[i]-'a'])
+        return -1;
+        tempnode=tempnode->children[text[i]-'a'];
+    }
+    return tempnode->weight;
+}
+
+int main()
+{
+    int n,q;
+    cin>>n>>q;
+    struct trienode* root=getnode();
+    for(int i=0;i<n;i++) {
+        string word;
+        int wt;
+        cin>>word>>wt;
+        insert(root,word,wt);
+    }
+    while(q--){
+        string text;
+        cin>>text;
+        cout<<auto_complete(root,text)<<endl;
+    }
+    return 0;
+}
