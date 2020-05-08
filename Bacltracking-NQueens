@@ -1,28 +1,28 @@
 bool issafe(vector<string>&temp,int row,int col,int n){
-    for(int i=0;i<row;i++){
-        if(temp[i][col]=='Q') 
+    for(int i=0;i<col;i++){
+        if(temp[row][i]=='Q') 
         return false;
     }
     for(int i=row,j=col;i>=0 && j>=0;i--,j--){
         if(temp[i][j]=='Q') 
         return false;
     }
-    for(int i=row,j=col;i>=0 && j<n;i--,j++){
+    for(int i=row,j=col;i<n && j>=0;i++,j--){
         if(temp[i][j]=='Q') 
         return false;
     }
     return true;
 } 
 
-void solve(int row,vector<vector<string>>&res,vector<string>&temp,int n){
-    if(row==n){
+void solve(int col,vector<vector<string>>&res,vector<string>&temp,int n){
+    if(col==n){
         res.push_back(temp);
         return;
     }
-    for(int col=0;col<n;col++){
+    for(int row=0;row<n;row++){
         if(issafe(temp,row,col,n)){
             temp[row][col]='Q';
-            solve(row+1,res,temp,n);
+            solve(col+1,res,temp,n);
             temp[row][col]='.';
         }
     }
