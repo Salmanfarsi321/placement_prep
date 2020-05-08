@@ -1,0 +1,31 @@
+void solve(int i,string A,string temp,vector<string>&res,unordered_map<char,string>mp){
+    if(i==A.size()){
+        res.push_back(temp);
+        return;
+    }
+    if(i>A.size()) return;
+    string init=mp[A[i]];
+    for(int j=0;j<init.size();j++){
+        temp+=init[j];
+        solve(i+1,A,temp,res,mp);
+        temp.pop_back();
+    }
+}
+
+vector<string> Solution::letterCombinations(string A) {
+   vector<string>res;
+   string temp="";
+   unordered_map<char,string>mp;
+   mp['0']="0";
+   mp['1']="1";
+   mp['2']="abc";
+   mp['3']="def";
+   mp['4']="ghi";
+   mp['5']="jkl";
+   mp['6']="mno";
+   mp['7']="pqrs";
+   mp['8']="tuv";
+   mp['9']="wxyz";
+   solve(0,A,temp,res,mp);
+   return res;
+}
