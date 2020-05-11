@@ -1,0 +1,69 @@
+1st approach
+
+int Solution::solve(int A, int B) {
+    int n=A;
+    int sum=B;
+    if(sum<1 || sum>n*9) return 0;
+    long long int dp[n][sum];
+    //dp[i][j] --> number of i+1 digit numbers  on being added giving j+1
+    for(int i=0;i<sum;i++){
+        if(i+1<=9) dp[0][i]=1;
+        else
+        dp[0][i]=0;
+    }
+    for(int i=0;i<n;i++)
+    dp[i][0]=1;
+    for(int i=1;i<n;i++){
+        for(int j=1;j<sum;j++){
+            dp[i][j]=0;
+            int k=0;
+            if(j>=9) k=9;
+            for(;k<=j;k++){
+                dp[i][j]=(dp[i][j]+dp[i-1][j-k])%1000000007;
+            }
+        }
+    }
+    return dp[n-1][sum-1];
+}
+
+2nd approach (More intuitive)
+
+const int mod=1e9+7;
+
+int dp[1000][1000];
+
+int helper(int n,int sum){
+    if(n==0) return sum==0;
+    if(sum==0) return 1;
+    if(dp[n][sum]!=-1) return dp[n][sum];
+    int ans=0;
+    for(int i=0;i<=9;i++){
+        if(sum>=i){
+        ans+=helper(n-1,sum-i);
+        ans=ans%mod;
+        }
+    }
+    return dp[n][sum]=ans;
+}
+
+int rec(int n,int sum){
+    int ans=0;
+    for(int i=1;i<=9;i++){
+        if(sum>=i){
+        ans+=helper(n-1,sum-i);
+        ans=ans%mod;
+        }
+    }
+    return ans;
+}
+
+int Solution::solve(int A, int B) {
+    int n=A;
+    int sum=B;
+    memset(dp,-1,sizeof(dp));
+    int ans=rec(n,sum);
+    ans=ans%mod;
+    return ans;
+}
+
+
