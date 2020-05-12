@@ -1,0 +1,25 @@
+int Solution::solve(const vector<int> &a) 
+{
+    int n=a.size();
+    if(n<3) return n;
+    int dp[n][n];
+    memset(dp,-1,sizeof(dp));
+    unordered_map<int,int>mp;
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            //a[i]-x==a[j]-a[i]
+            dp[i][j]=2;
+            int need=2*a[i]-a[j];
+            if(mp.find(need)!=mp.end())
+            dp[i][j]=max(dp[i][j],dp[mp[need]][i]+1);
+        }
+        mp[a[i]]=i;
+    }
+    int mx=2;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            mx=max(mx,dp[i][j]);
+        }
+    }
+    return mx;
+}
