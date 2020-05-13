@@ -1,0 +1,52 @@
+const int mod=1e9+7;
+#define ll long long
+
+struct triplet{
+    int x,y,z;
+};
+
+vector<triplet> trip;
+
+int dp[4][4][4][100005];
+
+void filltriplets(){
+    trip.clear();
+    for(int i=0;i<4;i++){
+        for(int j=0;j<4;j++){
+            for(int k=0;k<4;k++){
+                if(i!=j && j!=k) 
+                trip.push_back({i,j,k});
+            }
+        }
+    }
+}
+
+bool iscompatible(triplet &t1,triplet &t2){
+    if(t1.x==t2.x || t1.y==t2.y || t1.z==t2.z) return 0;
+    return 1;
+}
+
+int Solution::solve(int A) {
+    int n=A;
+    if(n<=0) return -1;
+    filltriplets();
+    for(int i=1;i<=n;i++){
+        for(int j=0;j<36;j++){
+            if(i==1) dp[trip[j].x][trip[j].y][trip[j].z][i]=1;
+            else{
+                ll temp=0;
+                for(int k=0;k<36;k++){
+                    if(iscompatible(trip[j],trip[k])){
+                    temp+=dp[trip[k].x][trip[k].y][trip[k].z][i-1];
+                    temp%=mod;
+                    }
+                }
+                dp[trip[j].x][trip[j].y][trip[j].z][i]=temp;
+            }
+        }
+    }
+    ll ans=0;
+    for(int i=0;i<36;i++)
+    ans=(ans+dp[trip[i].x][trip[i].y][trip[i].z][n])%mod;
+    return ans;
+}
