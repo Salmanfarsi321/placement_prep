@@ -1,0 +1,42 @@
+Say you have an array, A, for which the ith element is the price of a given stock on day i.
+
+Design an algorithm to find the maximum profit. You may complete at most 2 transactions.
+
+Return the maximum possible profit.
+
+Input 1:
+    A = [1, 2, 1, 2]
+
+Output 1:
+    2
+
+Explanation 1: 
+    Day 0 : Buy 
+    Day 1 : Sell
+    Day 2 : Buy
+    Day 3 : Sell
+
+Input 2:
+    A = [7, 2, 4, 8, 7]
+Note: You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+
+---------------------------------------------------------solution-----------------------------------------------------------
+
+int Solution::maxProfit(const vector<int> &price) {
+    int n=price.size();
+    if(n==0) return 0;
+    int k=2;
+    int dp[k+1][n];
+    for(int i=0;i<=k;i++)
+    dp[i][0]=0;
+    for(int i=0;i<n;i++)
+    dp[0][i]=0;
+    for(int i=1;i<=k;i++){
+        int prev=INT_MIN;
+        for(int j=1;j<n;j++){
+            prev=max(prev,dp[i-1][j-1]-price[j-1]);
+            dp[i][j]=max(dp[i][j-1],price[j]+prev);
+        }
+    }
+    return dp[k][n-1];
+}
