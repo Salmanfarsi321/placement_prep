@@ -1,0 +1,40 @@
+/*You are given a sequence of black and white horses, and a set of K stables numbered 1 to K.
+You have to accommodate the horses into the stables in such a way that the following conditions are satisfied:
+
+1.You fill the horses into the stables preserving the relative order of horses. 
+For instance, you cannot put horse 1 into stable 2 and horse 2 into stable 1. You have to preserve the ordering of the horses.
+2.No stable should be empty and no horse should be left unaccommodated.
+3.Take the product (number of white horses * number of black horses) for each stable and
+take the sum of all these products. This value should be the minimum among all possible accommodation arrangements*/
+
+int product(string A){
+    int i,n=A.length();
+    int w=0,b=0;
+    for(i=0;i<n;i++){
+        if(A[i]=='W')
+            w++;
+        else b++;
+    }
+    return w*b;
+}
+ 
+long long answer(string &A,int l,int k,vector<vector<int> >&dp){
+    long long ans=INT_MAX;
+    int r=A.length();
+    if(k==0){
+        return (long long)(product(A.substr(l,r-l)));
+    }
+    if(dp[l][k]!=-1) return dp[l][k];
+    for(int i=l;i<r-k;i++){
+        ans=min(ans,(long long)product(A.substr(l,i-l+1))+(long long)answer(A,i+1,k-1,dp));
+    }
+    return dp[l][k]=ans;
+}
+ 
+int Solution::arrange(string A, int B) {
+    int n=A.size();
+    if(B>n)
+        return -1;
+    vector<vector<int> >dp(n,vector<int>(B,-1));
+    return (int)answer(A,0,B-1,dp);
+}
