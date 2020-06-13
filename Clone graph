@@ -1,0 +1,33 @@
+/*Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.*/
+
+/**
+ * Definition for undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+UndirectedGraphNode *Solution::cloneGraph(UndirectedGraphNode *node) {
+    UndirectedGraphNode* graphcopy=new UndirectedGraphNode(node->label);
+    unordered_map<UndirectedGraphNode*,UndirectedGraphNode* >mp;
+    queue<UndirectedGraphNode* >q;
+    q.push(node);
+    mp[node]=graphcopy;
+    while(!q.empty()){
+        UndirectedGraphNode *cur_node=q.front();
+        q.pop();
+        for(auto child:cur_node->neighbors){
+        if(mp.count(child)==0){
+            UndirectedGraphNode* newnode=new UndirectedGraphNode(child->label);
+            mp[cur_node]->neighbors.push_back(newnode);
+            mp[child]=newnode;
+            q.push(child);
+        }
+        else{
+            mp[cur_node]->neighbors.push_back(mp[child]);
+        }
+        }
+    }
+    return graphcopy;
+}
